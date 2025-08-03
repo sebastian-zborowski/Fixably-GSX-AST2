@@ -2,14 +2,18 @@
 
 Zestaw użytkowych rozszerzeń (UserScriptów) usprawniających pracę w systemach Fixably oraz GSX/AST2.
 
+
 ---
+
 
 ### ✅ Kompatybilność:
 Skrypty działają w przeglądarkach:
 - **Chrome / Edge / Firefox** – przez rozszerzenie **[TamperMonkey (Chrome Web Store)](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=pl)**
 - **Safari (macOS / iOS)** – przez aplikację **[Userscripts (App Store)](https://apps.apple.com/pl/app/userscripts/id1463298887)**
 
+
 ---
+
 
 ## 📥 Pobieranie i instalacja:
 
@@ -17,7 +21,9 @@ Kliknij w poniższy link aby pobrać plik **.ZIP** zawierający wszystkie oferow
 
 👉 [**Pobierz paczkę ZIP (ScriptPack_1.0)**](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/raw/main/ScriptPack_1.0.zip)
 
+
 ---
+
 
 ## 🧩 Lista skryptów i ich funkcjonalność:
 
@@ -41,23 +47,30 @@ Współdziała ze skryptem INTERFACE_TWEAKS, aby obsługa była w pełni zautoma
 ### [FIXABLY] - INTERFACE_TWEAKS
 Zaawansowana reorganizacja interfejsu Fixably. Upodabnia interfej do tego w Servo
 
+
 ---
+
 
 ## 🛠️ Uwaga techniczna:
 
 Skrypty zostały utworzone metodą tzw. **Vibecodingu** – nie ingerują trwale w działanie serwisów, nie zbierają danych użytkownika, nie przetwarzają danych wrażliwych ani nie wprowadzają trwałych modyfikacji serwerowych. Działają wyłącznie po stronie użytkownika, oferując drobne usprawnienia interfejsu i workflow.
 
+
 ---
+
 
 🔄 Aktualizacje skryptów
 
 Skrypty nie aktualizują się automatycznie. Gdy nowa wersja zostanie udostępniona, pojawi się popup z powiadomieniem o dostępności aktualizacji, którą można przeprowadzić z poziomu **TamperMonkey** i/lub **UserScripts**.
 
+
 ---
+
 
 ## 🧑‍💻 Autor
 
 **Sebastian Zborowski**  
 [GitHub Profil](https://github.com/sebastian-zborowski)
+
 
 ---
