@@ -25,6 +25,18 @@ Kliknij w poniższy link aby pobrać plik **.ZIP** zawierający wszystkie oferow
 ---
 
 
+## 📖 Instalacja
+
+- **Przeglądarka Safari** z rozszerzeniem **Userscripts**  
+  <a href=https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/Instalacja_-_UserScripts.html>Pobierz instrukcję dla Safari</a>
+
+- **Przeglądarka Chrome i inne** z rozszerzeniem **TamperMonkey**  
+  <a href=https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/raw/main/Instalacja_-_TamperMonkey.html> Pobierz instrukcję dla innych przeglądarek</a>
+
+
+---
+
+
 ## 🧩 Lista skryptów i ich funkcjonalność:
 
 ### [FIXABLY] - PHOTO_PREVIEW
@@ -46,18 +58,6 @@ Współdziała ze skryptem INTERFACE_TWEAKS, aby obsługa była w pełni zautoma
 
 ### [FIXABLY] - INTERFACE_TWEAKS
 Zaawansowana reorganizacja interfejsu Fixably. Upodabnia interfej do tego w Servo
-
-
----
-
-
-## 📖 Instalacja
-
-- **Przeglądarka Safari** z rozszerzeniem **Userscripts**  
-  <a href=https://github.com/sebastian-zborowski/Fixably-GSX-AST2/raw/main/Instalacja_-_UserScripts.html>Pobierz instrukcję dla Safari</a>
-
-- **Przeglądarka Chrome i inne** z rozszerzeniem **TamperMonkey**  
-  <a href=https://github.com/sebastian-zborowski/Fixably-GSX-AST2/raw/main/Instalacja_-_TamperMonkey.html> Pobierz instrukcję dla innych przeglądarek</a>
 
 
 ---
