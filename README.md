@@ -71,8 +71,7 @@ Skrypty nie aktualizują się automatycznie. Gdy nowa wersja zostanie udostępni
 ## 🧑‍💻 Autor:
 
 **Sebastian Zborowski**  
-[GitHub](https://github.com/sebastian-zborowski)
-[LinkedIn](https://www.linkedin.com/in/sebastian-zborowski-072853218/)
+[GitHub](https://github.com/sebastian-zborowski) - [LinkedIn](https://www.linkedin.com/in/sebastian-zborowski-072853218/)
 
 
 ---
