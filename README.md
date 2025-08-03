@@ -6,7 +6,7 @@ Zestaw użytkowych rozszerzeń (UserScriptów) usprawniających pracę w systema
 ---
 
 
-### ✅ Kompatybilność:
+## ✅ Kompatybilność:
 Skrypty działają w przeglądarkach:
 - **Chrome / Edge / Firefox** – przez rozszerzenie **[TamperMonkey (Chrome Web Store)](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=pl)**
 - **Safari (macOS / iOS)** – przez aplikację **[Userscripts (App Store)](https://apps.apple.com/pl/app/userscripts/id1463298887)**
@@ -59,7 +59,7 @@ Skrypty zostały utworzone metodą tzw. **Vibecodingu** – nie ingerują trwale
 ---
 
 
-🔄 Aktualizacje skryptów
+##🔄 Aktualizacje skryptów
 
 Skrypty nie aktualizują się automatycznie. Gdy nowa wersja zostanie udostępniona, pojawi się popup z powiadomieniem o dostępności aktualizacji, którą można przeprowadzić z poziomu **TamperMonkey** i/lub **UserScripts**.
 
