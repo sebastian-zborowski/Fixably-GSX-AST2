@@ -59,7 +59,7 @@ Skrypty zostały utworzone metodą tzw. **Vibecodingu** – nie ingerują trwale
 ---
 
 
-##🔄 Aktualizacje skryptów
+## 🔄 Aktualizacje skryptów:
 
 Skrypty nie aktualizują się automatycznie. Gdy nowa wersja zostanie udostępniona, pojawi się popup z powiadomieniem o dostępności aktualizacji, którą można przeprowadzić z poziomu **TamperMonkey** i/lub **UserScripts**.
 
@@ -67,7 +67,7 @@ Skrypty nie aktualizują się automatycznie. Gdy nowa wersja zostanie udostępni
 ---
 
 
-## 🧑‍💻 Autor
+## 🧑‍💻 Autor:
 
 **Sebastian Zborowski**  
 [GitHub Profil](https://github.com/sebastian-zborowski)
