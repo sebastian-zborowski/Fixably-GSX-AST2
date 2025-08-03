@@ -22,17 +22,6 @@ Kliknij w poniższy link aby pobrać plik **.ZIP** zawierający wszystkie oferow
 👉 [**Pobierz wszystkie skrypty jako ZIP**](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/archive/refs/heads/main.zip)
 
 
----
-
-
-## 📖 Instalacja
-
-- **Przeglądarka Safari** z rozszerzeniem **Userscripts**  
-  <a href=https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/Instalacja_-_UserScripts.html>Pobierz instrukcję dla Safari</a>
-
-- **Przeglądarka Chrome i inne** z rozszerzeniem **TamperMonkey**  
-  <a href=https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/raw/main/Instalacja_-_TamperMonkey.html> Pobierz instrukcję dla innych przeglądarek</a>
-
 
 ---
 
