@@ -17,7 +17,7 @@ Skrypty działają w przeglądarkach:
 
 ## 📥 Pobieranie i instalacja:
 
-Kliknij w poniższy link aby pobrać plik **.ZIP** zawierający wszystkie oferowane usprawnienia.
+Kliknij w poniższy link aby pobrać plik **.ZIP** zawierający wszystkie skrypty oraz instruckje
 
 👉 [**Pobierz wszystkie skrypty jako ZIP**](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/archive/refs/heads/main.zip)
 
