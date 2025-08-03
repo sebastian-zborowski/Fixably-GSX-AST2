@@ -54,10 +54,10 @@ Zaawansowana reorganizacja interfejsu Fixably. Upodabnia interfej do tego w Serv
 ## 📖 Instalacja
 
 - **Przeglądarka Safari** z rozszerzeniem **Userscripts**  
-  [Pobierz instrukcję instalacji](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/blob/main/Instalacja_-_UserScripts.html)
+  [Pobierz instrukcję instalacji](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/raw/main/Instalacja_-_UserScripts.html)
 
 - **Przeglądarka Chrome i inne** z rozszerzeniem **TamperMonkey**  
-  [Pobierz instrukcję instalacji](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/blob/main/Instalacja_-_TamperMonkey.html)
+  [Pobierz instrukcję instalacji](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/raw/main/Instalacja_-_TamperMonkey.html)
 
 
 ---
