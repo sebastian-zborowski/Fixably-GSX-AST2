@@ -51,6 +51,18 @@ Zaawansowana reorganizacja interfejsu Fixably. Upodabnia interfej do tego w Serv
 ---
 
 
+## 📖 Instalacja
+
+- **Przeglądarka Safari** z rozszerzeniem **Userscripts**  
+  [Pobierz instrukcję instalacji](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/blob/main/Instalacja_-_UserScripts.html)
+
+- **Przeglądarka Chrome i inne** z rozszerzeniem **TamperMonkey**  
+  [Pobierz instrukcję instalacji](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/blob/main/Instalacja_-_TamperMonkey.html)
+
+
+---
+
+
 ## 🛠️ Uwaga techniczna:
 
 Skrypty zostały utworzone metodą tzw. **Vibecodingu** – nie ingerują trwale w działanie serwisów, nie zbierają danych użytkownika, nie przetwarzają danych wrażliwych ani nie wprowadzają trwałych modyfikacji serwerowych. Działają wyłącznie po stronie użytkownika, oferując drobne usprawnienia interfejsu i workflow.
