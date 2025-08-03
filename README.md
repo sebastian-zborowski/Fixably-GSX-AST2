@@ -19,7 +19,7 @@ Skrypty działają w przeglądarkach:
 
 Kliknij w poniższy link aby pobrać plik **.ZIP** zawierający wszystkie oferowane usprawnienia.
 
-👉 [**Pobierz paczkę ZIP (ScriptPack_1.0)**](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/raw/main/ScriptPack_1.0.zip)
+👉 [**Pobierz paczkę ZIP (AllScripts]([https://github.com/sebastian-zborowski/Fixably-GSX-AST2/raw/main/ScriptPack_1.0.zip](https://github.com/sebastian-zborowski/Fixably-GSX-AST2/archive/refs/heads/main.zip))
 
 
 ---
