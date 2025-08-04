@@ -63,6 +63,7 @@ Skrypty zostały utworzone metodą tzw. **Vibecodingu** – nie ingerują trwale
 ## 🔄 Aktualizacje skryptów:
 
 Skrypty nie aktualizują się automatycznie. Gdy nowa wersja zostanie udostępniona, pojawi się popup z powiadomieniem o dostępności aktualizacji, którą można przeprowadzić z poziomu **TamperMonkey** i/lub **UserScripts**.
+Informacja o aktualizacji powinna pojawić się w ciągu godziny od jej wprowadzenia na GitHub.
 
 
 ---
