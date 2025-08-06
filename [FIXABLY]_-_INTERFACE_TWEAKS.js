@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         [FIXABLY] - INTERFACE_TWEAKS
-// @version      1.0
+// @version      1.1
 // @description  Reorganizacja interfejsu na modłe SERVO + kilka zmian quality of life
 // @author       Sebastian Zborowski - https://github.com/sebastian-zborowski
 // @match        https://ispot.fixably.com/*
@@ -14,10 +14,12 @@
 //Disclaimer:
 //Niniejszy skrypt został utworzony metodą Vibecodingu. Nie ingeruje trwale w oryginalne strony internetowe, nie odwołuje się do danych prywatnych ani chronionych przepisami RODO, nie przetwarza danych osobowych, a także nie zmienia podstawowego działania strony. Skrypt dodaje kilka automatyzacji, skrótów oraz modyfikacje wizualne, które mają na celu usprawnienie i ułatwienie korzystania z serwisu.
 
-//Ostatni update: 03.08.2025 
+//Ostatni update: 06.08.2025
 
 (function () {
     'use strict';
+
+    initGsxAst2Observer();
 
     function safeGetLocalStorage(key) {
         try {
@@ -345,8 +347,6 @@
     function minimizeComments() {
         const commentPanels = document.querySelectorAll('.timeline-panel');
         commentPanels.forEach(panel => {
-            //panel.style.maxHeight = '';
-            //panel.style.overflow = '';
             panel.style.fontSize = '12px';
             panel.style.padding = '4px 6px';
         });
@@ -364,41 +364,101 @@
         const serialSpan = document.querySelector('span.copy-to-clipboard[data-copy]');
         if (!serialSpan) return;
 
-        const serial = serialSpan.getAttribute('data-copy');
-        if (!serial || document.getElementById('gsx-link') || document.getElementById('ast2-link')) return;
+        const serial = (serialSpan.getAttribute('data-copy') || '').trim();
+        if (!serial) return;
+
+        if (document.getElementById('gsx-link') && document.getElementById('ast2-link')) return;
+
+        function makeLinks() {
+            const gsx = document.createElement('a');
+            gsx.href = `https://gsx2.apple.com/product-details/${encodeURIComponent(serial)}?opengnum=1`;
+            gsx.target = '_blank';
+            gsx.textContent = '[GSX]';
+            gsx.id = 'gsx-link';
+            gsx.style.marginLeft = '8px';
+            gsx.style.fontSize = '11px';
+
+            const ast = document.createElement('a');
+            ast.href = `https://diagnostics.apple.com/?serial=${encodeURIComponent(serial)}`;
+            ast.target = '_blank';
+            ast.textContent = '[AST2]';
+            ast.id = 'ast2-link';
+            ast.style.marginLeft = '8px';
+            ast.style.fontSize = '11px';
+
+            return { gsx, ast };
+        }
+
+        const { gsx, ast } = makeLinks();
 
         const dt = serialSpan.closest('dt');
-        const dd = dt?.nextElementSibling;
-        if (!dd || dd.tagName.toLowerCase() !== 'dd') return;
+        const ddAfter = dt ? dt.nextElementSibling : null;
+        if (ddAfter && ddAfter.tagName && ddAfter.tagName.toLowerCase() === 'dd') {
+            if (!document.getElementById('gsx-link')) ddAfter.appendChild(gsx);
+            if (!document.getElementById('ast2-link')) ddAfter.appendChild(ast);
+            return;
+        }
 
-        const gsx = document.createElement('a');
-        gsx.href = `https://gsx2.apple.com/product-details/${serial}?opengnum=1`;
-        gsx.target = '_blank';
-        gsx.textContent = '[GSX]';
-        gsx.id = 'gsx-link';
-        gsx.style.marginLeft = '8px';
-        gsx.style.fontSize = '11px';
+        try {
+            if (!document.getElementById('gsx-link')) serialSpan.insertAdjacentElement('afterend', gsx);
+            if (!document.getElementById('ast2-link')) serialSpan.insertAdjacentElement('afterend', ast);
+            if (document.getElementById('gsx-link') || document.getElementById('ast2-link')) return;
+        } catch (e) {
+            console.warn('addGsxLink: insertAdjacentElement after span failed', e);
+        }
 
-        dd.appendChild(gsx);
+        try {
+            const dl = serialSpan.closest('dl');
+            if (dl) {
+                const ddList = Array.from(dl.querySelectorAll('dd'));
+                const matched = ddList.find(dd => {
+                    const txt = (dd.textContent || '').trim();
+                    return txt.includes(serial) || serial.includes(txt) || txt.replace(/\s+/g,'').includes(serial.replace(/\s+/g,'')) ;
+                });
+                if (matched) {
+                    if (!document.getElementById('gsx-link')) matched.appendChild(gsx);
+                    if (!document.getElementById('ast2-link')) matched.appendChild(ast);
+                    return;
+                }
+            }
+        } catch (e) {
+            console.warn('addGsxLink fallback 3 failed', e);
+        }
 
-        const ast = document.createElement('a');
-        ast.href = `https://diagnostics.apple.com/?serial=${serial}`;
-        ast.target = '_blank';
-        ast.textContent = '[AST2]';
-        ast.id = 'ast2-link';
-        ast.style.marginLeft = '8px';
-        ast.style.fontSize = '11px';
+        const fallbackTarget = document.getElementById('device-panel') || document.getElementById('order_device_container') || document.getElementById('order-device');
+        if (fallbackTarget) {
+            if (!document.getElementById('gsx-link')) fallbackTarget.appendChild(gsx);
+            if (!document.getElementById('ast2-link')) fallbackTarget.appendChild(ast);
+        }
+    }
 
-        dd.appendChild(ast);
+    function initGsxAst2Observer() {
+        const targetSelector = 'span.copy-to-clipboard[data-copy]';
+        const observer = new MutationObserver(() => {
+            const el = document.querySelector(targetSelector);
+            if (el) {
+                addGsxLink();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
     }
 
     function addGoodsReceiveLink() {
         const targetLink = document.querySelector('a.editable.editable-click.text-danger[data-name="serial"]');
-        if (
-            !targetLink ||
-            document.getElementById('goods-receive-link') ||
-            targetLink.textContent.trim() !== 'Add Known Good Board (KGB)'
-        ) return;
+
+        let altTarget = null;
+        if (!targetLink) {
+            altTarget = Array.from(document.querySelectorAll('a')).find(a => (a.textContent || '').trim() === 'Add Known Good Board (KGB)');
+        }
+
+        const anchor = targetLink || altTarget;
+        if (!anchor) return;
+
+        if (document.getElementById('goods-receive-link')) return;
 
         const link = document.createElement('a');
         link.href = 'https://ispot.fixably.com/pl/goods/receive';
@@ -408,7 +468,11 @@
         link.style.fontSize = '12px';
         link.style.color = '#007bff';
 
-        targetLink.insertAdjacentElement('afterend', link);
+        try {
+            anchor.insertAdjacentElement('afterend', link);
+        } catch (e) {
+            anchor.parentElement && anchor.parentElement.appendChild(link);
+        }
     }
 
     function highlightWarrantyAndSerial() {
@@ -543,6 +607,13 @@
         }
     }
 
+    function initAlwaysOnFeatures() {
+        waitForElement('span.copy-to-clipboard[data-copy]', addGsxLink, 15000);
+
+        waitForElement('a.editable.editable-click.text-danger[data-name="serial"]', addGoodsReceiveLink, 15000);
+    }
+
+
     function setupUrlHooks() {
         function hookHistoryMethod(method) {
             const original = history[method];
@@ -583,6 +654,8 @@
 
                 waitForElement('a.editable.editable-click.text-danger[data-name="serial"]', addGoodsReceiveLink);
             }
+
+            initAlwaysOnFeatures();
         });
 
         let lastPath = location.pathname;
@@ -611,6 +684,7 @@
                     setTimeout(() => {
                         injectServoToggle();
                         initPage();
+                        initAlwaysOnFeatures(); // NOWE: re-init linków gdy DOM się odświeża
                     }, 100);
                     break;
                 }
@@ -676,109 +750,107 @@
             setupUrlHooks();
             setupGxsRepairInfoWatcher();
             initPage();
+            initAlwaysOnFeatures();
         });
     } else {
         injectServoToggle();
         setupUrlHooks();
         setupGxsRepairInfoWatcher();
         initPage();
+        initAlwaysOnFeatures();
     }
 
+    (async function() {
+        const scriptList = [
+            { name: 'INTERFACE_TWEAKS', url: 'https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BFIXABLY%5D_-_INTERFACE_TWEAKS.js' },
+        ];
 
-// Kontrola wersji alert ---------------------------------------------------------
-(async function() {
-    const scriptList = [
-        { name: 'INTERFACE_TWEAKS', url: 'https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BFIXABLY%5D_-_INTERFACE_TWEAKS.js' },
-    ];
+        const currentVersions = {
+            INTERFACE_TWEAKS: '1.1',
+        };
 
-    const currentVersions = {
-        INTERFACE_TWEAKS: '1.0',
-    };
-
-    await Promise.all(scriptList.map(async script => {
-        try {
-            const res = await fetch(script.url);
-            const text = await res.text();
-            const match = text.match(/@version\s+([0-9.]+)/);
-            if (match) {
-                const version = match[1];
-                localStorage.setItem(script.name, JSON.stringify({
-                    name: script.name,
-                    remote: version
-                }));
-                console.log(`[VERSION CONTROL] ${script.name}: ${version}`);
-            } else {
-                console.warn(`[VERSION CONTROL] Nie znaleziono wersji dla: ${script.name}`);
+        await Promise.all(scriptList.map(async script => {
+            try {
+                const res = await fetch(script.url);
+                const text = await res.text();
+                const match = text.match(/@version\s+([0-9.]+)/);
+                if (match) {
+                    const version = match[1];
+                    localStorage.setItem(script.name, JSON.stringify({
+                        name: script.name,
+                        remote: version
+                    }));
+                    console.log(`[VERSION CONTROL] ${script.name}: ${version}`);
+                } else {
+                    console.warn(`[VERSION CONTROL] Nie znaleziono wersji dla: ${script.name}`);
+                }
+            } catch (err) {
+                console.warn(`[VERSION CONTROL] Błąd ładowania ${script.name}:`, err);
             }
-        } catch (err) {
-            console.warn(`[VERSION CONTROL] Błąd ładowania ${script.name}:`, err);
-        }
-    }));
+        }));
 
-    let popupCount = 0;
-    scriptList.forEach(script => {
-        const storedStr = localStorage.getItem(script.name);
-        if (!storedStr) return;
-        try {
-            const data = JSON.parse(storedStr);
-            const remoteVer = data?.remote;
-            const currentVer = currentVersions[script.name] || '0.0';
+        let popupCount = 0;
+        scriptList.forEach(script => {
+            const storedStr = localStorage.getItem(script.name);
+            if (!storedStr) return;
+            try {
+                const data = JSON.parse(storedStr);
+                const remoteVer = data?.remote;
+                const currentVer = currentVersions[script.name] || '0.0';
 
-            if (remoteVer && compareVersions(remoteVer, currentVer) > 0) {
-                showUpdatePopup(script.name, currentVer, remoteVer, popupCount++);
+                if (remoteVer && compareVersions(remoteVer, currentVer) > 0) {
+                    showUpdatePopup(script.name, currentVer, remoteVer, popupCount++);
+                }
+            } catch(e) {
+                console.warn(`[UPDATE CHECK] Błąd sprawdzania wersji dla ${script.name}:`, e);
             }
-        } catch(e) {
-            console.warn(`[UPDATE CHECK] Błąd sprawdzania wersji dla ${script.name}:`, e);
-        }
-    });
-
-    function compareVersions(v1, v2) {
-        const split1 = v1.split('.').map(Number);
-        const split2 = v2.split('.').map(Number);
-        const length = Math.max(split1.length, split2.length);
-        for (let i = 0; i < length; i++) {
-            const a = split1[i] || 0;
-            const b = split2[i] || 0;
-            if (a > b) return 1;
-            if (a < b) return -1;
-        }
-        return 0;
-    }
-
-    function showUpdatePopup(scriptName, current, remote, index) {
-        const popup = document.createElement('div');
-        popup.textContent = `🔔 Aktualizacja dostępna dla ${scriptName}: ${remote} (masz ${current})`;
-        Object.assign(popup.style, {
-         position: 'fixed',
-        bottom: `${35 + index * 100}px`, 
-        left: '50%',
-        transform: 'translateX(-50%)',
-        backgroundColor: '#222',
-        color: '#fff',
-        padding: '24px 36px', 
-        borderRadius: '16px', 
-        fontSize: '18px', 
-        zIndex: 9999 + index,
-        boxShadow: '0 0 20px rgba(0,0,0,0.4)',
-        cursor: 'pointer',
-        userSelect: 'none',
-        transition: 'opacity 0.3s ease',
-        opacity: '1',
-        maxWidth: '90%',
-        textAlign: 'center',
         });
 
-        popup.addEventListener('click', () => popup.remove());
+        function compareVersions(v1, v2) {
+            const split1 = v1.split('.').map(Number);
+            const split2 = v2.split('.').map(Number);
+            const length = Math.max(split1.length, split2.length);
+            for (let i = 0; i < length; i++) {
+                const a = split1[i] || 0;
+                const b = split2[i] || 0;
+                if (a > b) return 1;
+                if (a < b) return -1;
+            }
+            return 0;
+        }
 
-        document.body.appendChild(popup);
+        function showUpdatePopup(scriptName, current, remote, index) {
+            const popup = document.createElement('div');
+            popup.textContent = `🔔 Aktualizacja dostępna dla ${scriptName}: ${remote} (masz ${current})`;
+            Object.assign(popup.style, {
+                position: 'fixed',
+                bottom: `${35 + index * 100}px`,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                backgroundColor: '#222',
+                color: '#fff',
+                padding: '24px 36px',
+                borderRadius: '16px',
+                fontSize: '18px',
+                zIndex: 9999 + index,
+                boxShadow: '0 0 20px rgba(0,0,0,0.4)',
+                cursor: 'pointer',
+                userSelect: 'none',
+                transition: 'opacity 0.3s ease',
+                opacity: '1',
+                maxWidth: '90%',
+                textAlign: 'center',
+            });
 
-        setTimeout(() => {
-            // animacja znikania
-            popup.style.opacity = '0';
-            setTimeout(() => popup.remove(), 500);
-        }, 7500);
-    }
-})();
-// ---------------------------------------------------------------------------------
+            popup.addEventListener('click', () => popup.remove());
+
+            document.body.appendChild(popup);
+
+            setTimeout(() => {
+                popup.style.opacity = '0';
+                setTimeout(() => popup.remove(), 500);
+            }, 7500);
+        }
+    })();
 
 })();
