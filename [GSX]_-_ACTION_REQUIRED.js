@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         [GSX] - ACTION_REQUIRED
-// @version      1.0
+// @version      1.1
 // @description  Sprawdza dane z maila ACTION REQUIRED i generuje wiadomości do serwisantów
 // @author       Sebastian Zborowski
 // @match        https://gsx2.apple.co*
@@ -17,7 +17,7 @@
 //nie przetwarza danych osobowych, a także nie zmienia podstawowego działania strony. Skrypt dodaje kilka automatyzacji, skrótów oraz modyfikacje wizualne, które mają na celu
 //usprawnienie i ułatwienie korzystania z serwisu.
 
-//Ostatni update: 03.08.2025
+//Ostatni update: 07.08.2025
 
 (function () {
     'use strict';
@@ -29,7 +29,7 @@
 
     document.body.style.backgroundColor = "#555";
     const DELAY_MS = 3000;
-    const gnumToName = {}; // słownik: Gnum -> imię
+    const gnumToName = {}; 
     let codes = [];
 
     setTimeout(() => {
@@ -188,132 +188,162 @@
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         };
 
-        function fetchCodeData(code) {
-            return new Promise(resolve => {
-                const line = resultsDiv.querySelector('.result-line[data-code="' + code + '"]');
-                if (line) line.textContent = code + ': WCZYTUJE...';
+function fetchCodeData(code) {
+    return new Promise(resolve => {
+        const line = resultsDiv.querySelector('.result-line[data-code="' + code + '"]');
+        if (line) line.textContent = code + ': WCZYTUJE...';
 
-                let statusText = document.getElementById('current-check-status');
-                if (!statusText) {
-                    statusText = document.createElement('div');
-                    statusText.id = 'current-check-status';
-                    statusText.style.cssText = 'text-align:center;margin:10px auto 5px auto;font-weight:bold;color:#00bfff;font-size:16px;';
-                    document.body.appendChild(statusText);
-                }
-                statusText.textContent = 'Sprawdzam...';
-
-                const currentDate = Date.now();
-                const wrapper = document.createElement('div');
-                wrapper.id = 'object-wrapper-' + currentDate;
-                wrapper.style.cssText = 'display:inline-block;vertical-align:top;width:18%;padding:5px;margin:5px 5px 2% 5px;border:1px solid #00bfff;background:#111;text-align:center;border-radius:4px;';
-
-                const header = document.createElement('div');
-                header.textContent = code;
-                header.style.cssText = 'color:#00bfff;font-weight:bold;margin-bottom:5px;font-size:14px;';
-
-                const timerDiv = document.createElement('div');
-                timerDiv.id = 'object-timer' + currentDate;
-                timerDiv.style.cssText = 'color:white;font-weight:bold;font-size:13px;margin-bottom:5px;';
-                timerDiv.textContent = 'Rozpoczynam';
-
-                const objectEl = document.createElement('object');
-                objectEl.id = 'object-' + currentDate;
-                objectEl.data = 'https://gsx2.apple.com/repairs/' + code + '?dummy=1';
-                objectEl.type = 'text/html';
-                objectEl.style.cssText = 'width:100%;height:15vh;border:2px solid #00bfff;border-radius:3px;';
-
-                wrapper.appendChild(header);
-                wrapper.appendChild(timerDiv);
-                wrapper.appendChild(objectEl);
-
-                let objectsContainer = document.getElementById('objects-container');
-                if (!objectsContainer) {
-                    objectsContainer = document.createElement('div');
-                    objectsContainer.id = 'objects-container';
-                    objectsContainer.style.cssText = 'width:100%;display:flex;flex-wrap:wrap;justify-content:center;margin:10px auto;';
-                    document.body.appendChild(objectsContainer);
-                }
-
-                objectsContainer.appendChild(wrapper);
-
-                let secondsElapsed = 0;
-                const timerInterval = setInterval(() => {
-                    secondsElapsed++;
-                    timerDiv.textContent = 'Czas ładowania: ' + secondsElapsed + 's';
-
-                    if (secondsElapsed <= 3) {
-                        timerDiv.style.color = 'lightgreen';
-                    } else if (secondsElapsed <= 6) {
-                        timerDiv.style.color = 'yellow';
-                    } else {
-                        timerDiv.style.color = 'red';
-                    }
-
-                    if (secondsElapsed >= 20) {
-                        clearInterval(timerInterval);
-                        clearInterval(checkInterval);
-                        wrapper.remove();
-                        if (line) line.textContent = code + ': BŁĄD - przekroczono czas ładowania';
-                        statusText.textContent = '';
-                        resolve({ code, value: 'BŁĄD - przekroczono czas ładowania' });
-                    }
-                }, 1000);
-
-                const checkInterval = setInterval(() => {
-                    try {
-                        // Dostęp do dokumentu załadowanego w <object>
-                        const doc = objectEl.contentDocument || objectEl.getSVGDocument?.() || null;
-                        if (!doc) return;
-
-                        // Szukamy statusów na stronie wewnątrz <object>
-                        const statusSpan = doc.querySelector('span.objectId.header-4[aria-label="Repair status - Unit Returned Replaced"]');
-                        if (statusSpan) {
-                            clearInterval(timerInterval);
-                            clearInterval(checkInterval);
-                            wrapper.remove();
-                            if (line) line.textContent = code + ': Unit Returned Replaced';
-                            statusText.textContent = '';
-                            gnumToName[code] = 'Unit Returned Replaced';
-                            resolve({ code, value: 'Unit Returned Replaced' });
-                            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                            return;
-                        }
-
-                        const tech = doc.querySelector('div.v-center.repair-tech__wrapper h2.objectId');
-                        if (tech && tech.textContent.trim().length > 0) {
-                            clearInterval(timerInterval);
-                            clearInterval(checkInterval);
-                            wrapper.remove();
-                            const status = tech.textContent.trim();
-                            if (line) line.textContent = code + ': ' + status;
-                            statusText.textContent = '';
-                            gnumToName[code] = status;
-                            resolve({ code, value: status });
-                            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                            return;
-                        }
-
-                        const alt = doc.querySelector('span.objectId.header-4[aria-label*="Closed and completed"]');
-                        if (alt && alt.textContent.trim() === 'Closed and completed') {
-                            clearInterval(timerInterval);
-                            clearInterval(checkInterval);
-                            wrapper.remove();
-                            const status = 'Closed and completed';
-                            if (line) line.textContent = code + ': ' + status;
-                            statusText.textContent = '';
-                            gnumToName[code] = status;
-                            resolve({ code, value: status });
-                            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                            return;
-                        }
-                    } catch (e) {
-                        // console.log('object access error:', e);
-                    }
-                }, 500);
-
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            });
+        let statusText = document.getElementById('current-check-status');
+        if (!statusText) {
+            statusText = document.createElement('div');
+            statusText.id = 'current-check-status';
+            statusText.style.cssText = 'text-align:center;margin:10px auto 5px auto;font-weight:bold;color:#00bfff;font-size:16px;';
+            document.body.appendChild(statusText);
         }
+        statusText.textContent = 'Sprawdzam...';
+
+        const currentDate = Date.now();
+        const wrapper = document.createElement('div');
+        wrapper.id = 'object-wrapper-' + currentDate;
+        wrapper.style.cssText = 'display:inline-block;vertical-align:top;width:18%;height:30vh;padding:5px;margin:5px 5px 2% 5px;border:1px solid #00bfff;background:#111;text-align:center;border-radius:4px;';
+
+        const header = document.createElement('div');
+        header.textContent = code;
+        header.style.cssText = 'color:#00bfff;font-weight:bold;margin-bottom:5px;font-size:14px;';
+
+        const timerDiv = document.createElement('div');
+        timerDiv.id = 'object-timer' + currentDate;
+        timerDiv.style.cssText = 'color:white;font-weight:bold;font-size:13px;margin-bottom:5px;';
+        timerDiv.textContent = 'Rozpoczynam';
+
+        const objectEl = document.createElement('object');
+        objectEl.id = 'object-' + currentDate;
+        objectEl.data = 'https://gsx2.apple.com/repairs/' + code + '?dummy=1';
+        objectEl.type = 'text/html';
+        objectEl.style.cssText = 'width:100%;height:15vh;border:2px solid #00bfff;border-radius:3px;';
+
+        const textOutput = document.createElement('div');
+        textOutput.id = 'text-output-' + currentDate;
+        textOutput.style.cssText = 'margin-top:5px;padding:4px;background:#222;color:#00bfff;font-size:11px;text-align:left;position:relative;height:auto;overflow:auto;white-space:pre-wrap;border:1px solid #444;border-radius:3px;';
+        textOutput.textContent = 'Oczekiwanie na dane...';
+
+        wrapper.appendChild(header);
+        wrapper.appendChild(timerDiv);
+        wrapper.appendChild(objectEl);
+        wrapper.appendChild(textOutput);
+
+        let objectsContainer = document.getElementById('objects-container');
+        if (!objectsContainer) {
+            objectsContainer = document.createElement('div');
+            objectsContainer.id = 'objects-container';
+            objectsContainer.style.cssText = 'width:100%;display:flex;flex-wrap:wrap;justify-content:center;margin:10px auto;';
+            document.body.appendChild(objectsContainer);
+        }
+
+        objectsContainer.appendChild(wrapper);
+
+        let secondsElapsed = 0;
+        let hasRetried = false;
+        const timerInterval = setInterval(() => {
+            secondsElapsed++;
+            timerDiv.textContent = 'Czas ładowania: ' + secondsElapsed + 's';
+
+            if (secondsElapsed <= 3) {
+                timerDiv.style.color = 'lightgreen';
+            } else if (secondsElapsed <= 6) {
+                timerDiv.style.color = 'yellow';
+            } else {
+                timerDiv.style.color = 'red';
+            }
+
+            if (secondsElapsed >= 10) {
+                if (!hasRetried) {
+                    hasRetried = true;
+                    secondsElapsed = 0;
+                    timerDiv.textContent = 'Ponowne ładowanie...';
+                    timerDiv.style.color = 'orange';
+
+                    objectEl.data = '';
+                    setTimeout(() => {
+                        objectEl.data = 'https://gsx2.apple.com/repairs/' + code + '?dummy=1';
+                    }, 100);
+                } else {
+                    clearInterval(timerInterval);
+                    clearInterval(checkInterval);
+                    wrapper.remove();
+                    if (line) line.textContent = code + ': BŁĄD - przekroczono czas ładowania (2 próby)';
+                    statusText.textContent = '';
+                    resolve({ code, value: 'BŁĄD - przekroczono czas ładowania (2 próby)' });
+                }
+            }
+        }, 1000);
+
+        const checkInterval = setInterval(() => {
+            try {
+                const doc = objectEl.contentDocument || objectEl.getSVGDocument?.() || null;
+                if (!doc || !doc.body) return;
+
+                const rawText = doc.body.innerText.trim();
+                if (rawText.length > 0) {
+                    textOutput.textContent = rawText;
+                }
+
+                const lines = rawText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+                let potentialName = null;
+
+                for (let i of [4, 5]) {
+                    const line = lines[i];
+                    if (!line) continue;
+                    const parts = line.trim().split(/\s+/);
+                    if (parts.length === 2) {
+                        const validCaps = parts.every(w => /^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$/.test(w));
+                        const excluded = ['More actions', 'In Repair', 'Carry In', 'Clear All'];
+                        if (validCaps && !excluded.includes(line.trim())) {
+                            potentialName = line.trim();
+                            break;
+                        }
+                    }
+                }
+
+                if (potentialName) {
+                    clearInterval(timerInterval);
+                    clearInterval(checkInterval);
+                    setTimeout(() => {
+                        wrapper.remove();
+                        if (line) line.textContent = code + ': ' + potentialName;
+                        statusText.textContent = '';
+                        gnumToName[code] = potentialName;
+                        resolve({ code, value: potentialName });
+                    }, 600);
+                } else if (lines.length > 6) {
+                    const specialLine = lines
+                    .slice(0, 10)
+                    .find(l => ['Closed and completed', 'Unit Returned Replaced'].includes(l.trim()));
+
+                    const finalValue = specialLine || 'BŁĄD – brak technika';
+                    clearInterval(timerInterval);
+                    clearInterval(checkInterval);
+                    setTimeout(() => {
+                        wrapper.remove();
+                        if (line) line.textContent = code + ': ' + finalValue;
+                        statusText.textContent = '';
+                        gnumToName[code] = specialLine ? specialLine : 'ID:';
+                        resolve({ code, value: finalValue });
+                    }, 600);
+                }
+
+
+            } catch (e) {
+                // console.warn('Object access error:', e);
+            }
+        }, 500);
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    });
+}
+
+
+
 
         fetchAllBtn.onclick = async () => {
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
@@ -445,6 +475,7 @@
                     const messagesByName = {};
                     entries.forEach(({ code }) => {
                         const name = gnumToName[code] || 'Serwisant';
+                        console.log('Kod:', code, 'Technik:', name);
                         if (!messagesByName[name]) messagesByName[name] = new Set();
                         messagesByName[name].add(code);
                     });
@@ -481,20 +512,21 @@
                 const code = match[1];
                 const status = text.replace(code + ': ', '');
                 const name = gnumToName[code] || 'ID:';
+                console.log('Kod:', code, 'Technik:', name);
                 if (!nameToCodes[name]) nameToCodes[name] = [];
                 nameToCodes[name].push({ code, status });
             });
 
             let listLines = '';
             for (const [name, entries] of Object.entries(nameToCodes)) {
-                listLines += 'Serwisant: ' + name + '\n';
+                listLines += '~ ' + name + '\n';
                 entries.forEach(({ code }) => {
                     listLines += '  ' + code + '\n';
                 });
                 listLines += '\n';
             }
 
-            const message = 'Cześć,\nPrzesłane naprawy należą kolejno do:\n\n' + listLines + 'Osoby z listy zostały już poinformowane.~Wiadomość wygenerowana automatycznie\n\n';
+            const message = 'Cześć,\nPrzesłane naprawy należą do:\n\n' + listLines + '~Wiadomość wygenerowana automatycznie\n\n';
 
             navigator.clipboard.writeText(message).then(() => {
                 bulkMsgBtn.textContent = 'Skopiowano!';
@@ -515,7 +547,7 @@
     ];
 
     const currentVersions = {
-        ACTION_REQUIRED: '1.0',
+        ACTION_REQUIRED: '1.1',
     };
 
     await Promise.all(scriptList.map(async script => {
