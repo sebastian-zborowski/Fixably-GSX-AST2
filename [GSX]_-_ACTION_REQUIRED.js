@@ -5,6 +5,7 @@
 // @author       Sebastian Zborowski
 // @match        https://gsx2.apple.co*
 // @include      https://gsx2.apple.co*
+// @exclude      https://gsx2*dummy*
 // @updateURL    https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BGSX%5D_-_ACTION_REQUIRED.js
 // @downloadURL  https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BGSX%5D_-_ACTION_REQUIRED.js
 // @require      https://code.jquery.com/jquery-3.7.1.min.js
