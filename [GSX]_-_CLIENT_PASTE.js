@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         [GSX] - CLIENT_PASTE
-// @version      1.0
+// @version      1.1
 // @author       Sebastian Zborowski
 // @description  Debugowanie wklejania danych klienta do GSX
 // @match        https://gsx2.apple.com/*
