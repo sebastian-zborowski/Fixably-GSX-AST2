@@ -145,7 +145,7 @@
     (async function() {
 
         const scriptList = [
-            { name: 'OPEN_GNUM', url: 'https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BSERVO%5D_-_Client_Copy.js' },
+            { name: 'CLIENT_COPY', url: 'https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BSERVO%5D_-_Client_Copy.js' },
         ];
 
         const currentVersions = {
