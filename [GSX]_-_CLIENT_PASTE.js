@@ -98,6 +98,7 @@
     setTimeout(waitForContainerAndAddButton, 3000);
 
 
+
 // Kontrola wersji alert ---------------------------------------------------------
 (async function() {
     const scriptList = [
@@ -105,7 +106,7 @@
     ];
 
     const currentVersions = {
-        ACTION_REQUIRED: '1.1',
+        CLIENT_PASTE: '1.1',
     };
 
     await Promise.all(scriptList.map(async script => {
@@ -205,4 +206,5 @@ function showUpdatePopup(scriptName, current, remote, index) {
 })();
 // ---------------------------------------------------------------------------------
 
+})();
 })();
