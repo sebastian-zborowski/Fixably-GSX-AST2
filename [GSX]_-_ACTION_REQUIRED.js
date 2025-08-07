@@ -256,7 +256,7 @@ function fetchCodeData(code) {
                 timerDiv.style.color = 'red';
             }
 
-            if (secondsElapsed >= 10) {
+            if (secondsElapsed >= 15) {
                 if (!hasRetried) {
                     hasRetried = true;
                     secondsElapsed = 0;
@@ -318,7 +318,7 @@ function fetchCodeData(code) {
                 } else if (lines.length > 6) {
                     const specialLine = lines
                     .slice(0, 10)
-                    .find(l => ['Closed and completed', 'Unit Returned Replaced'].includes(l.trim()));
+                    .find(l => ['Closed and completed', 'Closed and Completed', 'Unit Returned Replaced'].includes(l.trim()));
 
                     const finalValue = specialLine || 'BŁĄD – brak technika';
                     clearInterval(timerInterval);
