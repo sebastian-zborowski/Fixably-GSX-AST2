@@ -4,6 +4,7 @@
 // @description  Automatycznie otwiera naprawę GSX z poziomu Fixably jednym kliknięciem. Rzoszerzenie działa w kooperacji z: FIXABLY_-_INTERFACE_TWEAKS
 // @author       Sebastian Zborowski
 // @match        https://gsx2.apple.com/*
+// @exclude      https://gsx2*dummy*
 // @updateURL    https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BGSX%5D_-_OPEN_GNUM.js
 // @downloadURL  https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BGSX%5D_-_OPEN_GNUM.js
 // @grant        none
