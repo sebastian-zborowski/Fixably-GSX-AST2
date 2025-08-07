@@ -29,7 +29,7 @@
 
     document.body.style.backgroundColor = "#555";
     const DELAY_MS = 3000;
-    const gnumToName = {}; 
+    const gnumToName = {};
     let codes = [];
 
     setTimeout(() => {
@@ -511,7 +511,7 @@ function fetchCodeData(code) {
                 if (!match) return;
                 const code = match[1];
                 const status = text.replace(code + ': ', '');
-                const name = gnumToName[code] || 'ID:';
+                const name = gnumToName[code] || 'BŁĄD - Sprawdzić ręcznie:';
                 console.log('Kod:', code, 'Technik:', name);
                 if (!nameToCodes[name]) nameToCodes[name] = [];
                 nameToCodes[name].push({ code, status });
