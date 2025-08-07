@@ -600,9 +600,9 @@ function fetchCodeData(code) {
         return 0;
     }
 
-    function showUpdatePopup(scriptName, current, remote, index) {
+function showUpdatePopup(scriptName, current, remote, index) {
         const popup = document.createElement('div');
-        popup.textContent = `🔔 Aktualizacja dostępna dla ${scriptName}: ${remote} (masz ${current})`;
+        popup.textContent = `🔔 Dostępna aktualizacja dla ${scriptName}: ${remote} (Zainstalowana wersja: ${current})`;
         Object.assign(popup.style, {
         position: 'fixed',
         bottom: `${20 + index * 100}px`,
@@ -623,12 +623,23 @@ function fetchCodeData(code) {
         textAlign: 'center',
         });
 
-        popup.addEventListener('click', () => popup.remove());
+        const closeBtn = document.createElement('span');
+        closeBtn.textContent = '❌';
+        Object.assign(closeBtn.style, {
+            position: 'absolute',
+            top: '8px',
+            right: '12px',
+            cursor: 'pointer',
+            color: '#fff',
+            fontWeight: 'bold',
+        });
 
+        closeBtn.addEventListener('click', () => popup.remove());
+
+        popup.appendChild(closeBtn);
         document.body.appendChild(popup);
 
         setTimeout(() => {
-            // animacja znikania
             popup.style.opacity = '0';
             setTimeout(() => popup.remove(), 500);
         }, 7500);
