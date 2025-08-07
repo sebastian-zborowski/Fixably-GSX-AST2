@@ -136,7 +136,7 @@
 
  function showUpdatePopup(scriptName, current, remote, index) {
         const popup = document.createElement('div');
-        popup.textContent = `🔔 Dostępna aktualizacja dla ${scriptName}: ${remote} (Zainstalowana wersja: ${current})`;
+        popup.textContent = `🔔 Dostępna aktualizacja ${remote} dla ${scriptName}  (Zainstalowana wersja: ${current})`;
         Object.assign(popup.style, {
         position: 'fixed',
         bottom: `${20 + index * 100}px`,
