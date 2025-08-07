@@ -33,59 +33,81 @@
         address.insertBefore(copyBtn, address.firstChild);
 
         function extractClientData() {
-            const safeText = el => el ? el.textContent.trim() : "";
+            const safeText = el => el ? el.textContent.trim() : " ";
 
+            // Imię i nazwisko
             const fullNameRaw = safeText(address.querySelector('strong > a'));
-            const [name, ...surnameParts] = fullNameRaw.split(' ');
-            const surname = surnameParts.join(' ').trim();
+            let name = " ", surname = " ";
+            if (fullNameRaw !== " ") {
+                const parts = fullNameRaw.split(' ');
+                name = parts[0] || " ";
+                surname = parts.slice(1).join(' ').trim() || " ";
+            }
 
+            // Email
             const emailLink = Array.from(address.querySelectorAll('a')).find(a => a.href.includes('@'));
-            const email = safeText(emailLink);
+            const email = safeText(emailLink) || " ";
 
-            let phone = "";
+            // Telefon
+            let phone = " ";
             const phoneCandidates = Array.from(address.querySelectorAll('a'))
-            .map(a => a.textContent.replace(/\D/g, ""))
-            .filter(txt => txt.length >= 9);
-
+                .map(a => a.textContent.replace(/\D/g, ""))
+                .filter(txt => txt.length >= 9);
             if (phoneCandidates.length > 0) {
                 const rawPhone = phoneCandidates[0];
-                phone = rawPhone.startsWith("48") && rawPhone.length === 11
+                phone = (rawPhone.startsWith("48") && rawPhone.length === 11)
                     ? rawPhone.slice(2)
-                : rawPhone.slice(-9);
+                    : rawPhone.slice(-9);
             }
 
+            // NIP
+            let nip = " ";
             const nipMatch = address.innerText.match(/NIP\s*:?[\s]*([\d\s\-]+)/i);
-            const nip = nipMatch ? nipMatch[1].replace(/\D/g, '') : "";
+            nip = nipMatch ? nipMatch[1].replace(/\D/g, '') : " ";
 
+            // Adres (street, postalCode, city)
+            let street = " ", postalCode = " ", city = " ";
             const addressLines = address.innerText
-            .split('\n')
-            .map(line => line.trim())
-            .filter(line => line.length > 0);
+                .split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0);
 
-            let street = "", postalCode = "", city = "";
             const nipIndex = addressLines.findIndex(line => line.startsWith('NIP'));
+
             if (nipIndex !== -1) {
-                street = addressLines[nipIndex + 1] || "";
-                const pcLine = addressLines[nipIndex + 2] || "";
+                street = addressLines[nipIndex + 1] || " ";
+                const pcLine = addressLines[nipIndex + 2] || " ";
                 const match = pcLine.match(/^(\d{2}-\d{3})\s+(.+)/);
-                postalCode = match ? match[1] : "";
-                city = match ? match[2] : pcLine;
+                postalCode = match ? match[1] : " ";
+                city = match ? match[2] : pcLine || " ";
+            } else {
+                // Szukamy linii z kodem pocztowym, by wyciągnąć adres bez NIP
+                const pcIndex = addressLines.findIndex(line => /^\d{2}-\d{3}/.test(line));
+                if (pcIndex !== -1 && pcIndex > 0) {
+                    postalCode = addressLines[pcIndex].match(/^(\d{2}-\d{3})/)[1] || " ";
+                    city = addressLines[pcIndex].replace(postalCode, '').trim() || " ";
+                    street = addressLines[pcIndex - 1] || " ";
+                }
             }
 
+            // repairNumber z h3[title]
             const h3 = document.querySelector('h3[title]');
-            const titleAttr = h3 ? h3.getAttribute('title') : "";
-            const rawRepairNumber = titleAttr.split('|')[0].trim() || "";
+            const titleAttr = h3 ? h3.getAttribute('title') : " ";
+            const rawRepairNumber = titleAttr.split('|')[0].trim() || " ";
 
+            // Inicjały z linku z ikoną user
             const userAnchor = Array.from(document.querySelectorAll('a')).find(a =>
-                                                                               a.querySelector('i.icon-user') && /\w+\s+\w+/.test(a.textContent)
-                                                                              );
-            const fullName = userAnchor ? userAnchor.textContent.trim() : "";
-            const initials = fullName
-            .split(' ')
-            .map(part => part.charAt(0).toUpperCase())
-            .join('');
+                a.querySelector('i.icon-user') && /\w+\s+\w+/.test(a.textContent)
+            );
+            const fullName = userAnchor ? userAnchor.textContent.trim() : " ";
+            const initials = fullName !== " "
+                ? fullName
+                    .split(' ')
+                    .map(part => part.charAt(0).toUpperCase())
+                    .join('')
+                : " ";
 
-            const repairNumber = (initials + rawRepairNumber).trim();
+            const repairNumber = ((initials !== " " ? initials : "") + (rawRepairNumber !== " " ? rawRepairNumber : "")).trim() || " ";
 
             return {
                 repairNumber,
@@ -106,16 +128,16 @@
 
             navigator.clipboard.writeText(json)
                 .then(() => {
-                console.log('[SERVO] - CLIENT_COPY: Dane klienta skopiowane do schowka:');
-                console.log(data);
-                copyBtn.textContent = 'SKOPIOWANO!';
-                setTimeout(() => copyBtn.textContent = 'KOPIUJ KLIENTA', 1500);
-            })
+                    console.log('[SERVO] - CLIENT_COPY: Dane klienta skopiowane do schowka:');
+                    console.log(data);
+                    copyBtn.textContent = 'SKOPIOWANO!';
+                    setTimeout(() => copyBtn.textContent = 'KOPIUJ KLIENTA', 1500);
+                })
                 .catch(err => {
-                console.error('[SERVO] - CLIENT_COPY: Błąd kopiowania:', err);
-                copyBtn.textContent = 'BŁĄD';
-                setTimeout(() => copyBtn.textContent = 'KOPIUJ KLIENTA', 1500);
-            });
+                    console.error('[SERVO] - CLIENT_COPY: Błąd kopiowania:', err);
+                    copyBtn.textContent = 'BŁĄD';
+                    setTimeout(() => copyBtn.textContent = 'KOPIUJ', 1500);
+                });
         });
     });
 
@@ -130,90 +152,90 @@
             OPEN_GNUM: '1.0',
         };
 
-    await Promise.all(scriptList.map(async script => {
-        try {
-            const res = await fetch(script.url);
-            const text = await res.text();
-            const match = text.match(/@version\s+([0-9.]+)/);
-            if (match) {
-                const version = match[1];
-                localStorage.setItem(script.name, JSON.stringify({
-                    name: script.name,
-                    remote: version
-                }));
-                console.log(`[VERSION CONTROL] ${script.name}: ${version}`);
-            } else {
-                console.warn(`[VERSION CONTROL] Nie znaleziono wersji dla: ${script.name}`);
+        await Promise.all(scriptList.map(async script => {
+            try {
+                const res = await fetch(script.url);
+                const text = await res.text();
+                const match = text.match(/@version\s+([0-9.]+)/);
+                if (match) {
+                    const version = match[1];
+                    localStorage.setItem(script.name, JSON.stringify({
+                        name: script.name,
+                        remote: version
+                    }));
+                    console.log(`[VERSION CONTROL] ${script.name}: ${version}`);
+                } else {
+                    console.warn(`[VERSION CONTROL] Nie znaleziono wersji dla: ${script.name}`);
+                }
+            } catch (err) {
+                console.warn(`[VERSION CONTROL] Błąd ładowania ${script.name}:`, err);
             }
-        } catch (err) {
-            console.warn(`[VERSION CONTROL] Błąd ładowania ${script.name}:`, err);
-        }
-    }));
+        }));
 
-    let popupCount = 0;
-    scriptList.forEach(script => {
-        const storedStr = localStorage.getItem(script.name);
-        if (!storedStr) return;
-        try {
-            const data = JSON.parse(storedStr);
-            const remoteVer = data?.remote;
-            const currentVer = currentVersions[script.name] || '0.0';
+        let popupCount = 0;
+        scriptList.forEach(script => {
+            const storedStr = localStorage.getItem(script.name);
+            if (!storedStr) return;
+            try {
+                const data = JSON.parse(storedStr);
+                const remoteVer = data?.remote;
+                const currentVer = currentVersions[script.name] || '0.0';
 
-            if (remoteVer && compareVersions(remoteVer, currentVer) > 0) {
-                showUpdatePopup(script.name, currentVer, remoteVer, popupCount++);
+                if (remoteVer && compareVersions(remoteVer, currentVer) > 0) {
+                    showUpdatePopup(script.name, currentVer, remoteVer, popupCount++);
+                }
+            } catch(e) {
+                console.warn(`[UPDATE CHECK] Błąd sprawdzania wersji dla ${script.name}:`, e);
             }
-        } catch(e) {
-            console.warn(`[UPDATE CHECK] Błąd sprawdzania wersji dla ${script.name}:`, e);
-        }
-    });
-
-    function compareVersions(v1, v2) {
-        const split1 = v1.split('.').map(Number);
-        const split2 = v2.split('.').map(Number);
-        const length = Math.max(split1.length, split2.length);
-        for (let i = 0; i < length; i++) {
-            const a = split1[i] || 0;
-            const b = split2[i] || 0;
-            if (a > b) return 1;
-            if (a < b) return -1;
-        }
-        return 0;
-    }
-
-    function showUpdatePopup(scriptName, current, remote, index) {
-        const popup = document.createElement('div');
-        popup.textContent = `🔔 Aktualizacja dostępna dla ${scriptName}: ${remote} (masz ${current})`;
-        Object.assign(popup.style, {
-        position: 'fixed',
-        bottom: `${20 + index * 100}px`,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        backgroundColor: '#222',
-        color: '#fff',
-        padding: '24px 36px',
-        borderRadius: '16px',
-        fontSize: '18px',
-        zIndex: 9999 + index,
-        boxShadow: '0 0 20px rgba(0,0,0,0.4)',
-        cursor: 'pointer',
-        userSelect: 'none',
-        transition: 'opacity 0.3s ease',
-        opacity: '1',
-        maxWidth: '90%',
-        textAlign: 'center',
         });
 
-        popup.addEventListener('click', () => popup.remove());
+        function compareVersions(v1, v2) {
+            const split1 = v1.split('.').map(Number);
+            const split2 = v2.split('.').map(Number);
+            const length = Math.max(split1.length, split2.length);
+            for (let i = 0; i < length; i++) {
+                const a = split1[i] || 0;
+                const b = split2[i] || 0;
+                if (a > b) return 1;
+                if (a < b) return -1;
+            }
+            return 0;
+        }
 
-        document.body.appendChild(popup);
+        function showUpdatePopup(scriptName, current, remote, index) {
+            const popup = document.createElement('div');
+            popup.textContent = `🔔 Aktualizacja dostępna dla ${scriptName}: ${remote} (masz ${current})`;
+            Object.assign(popup.style, {
+                position: 'fixed',
+                bottom: `${20 + index * 100}px`,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                backgroundColor: '#222',
+                color: '#fff',
+                padding: '24px 36px',
+                borderRadius: '16px',
+                fontSize: '18px',
+                zIndex: 9999 + index,
+                boxShadow: '0 0 20px rgba(0,0,0,0.4)',
+                cursor: 'pointer',
+                userSelect: 'none',
+                transition: 'opacity 0.3s ease',
+                opacity: '1',
+                maxWidth: '90%',
+                textAlign: 'center',
+            });
 
-        setTimeout(() => {
-            // animacja znikania
-            popup.style.opacity = '0';
-            setTimeout(() => popup.remove(), 500);
-        }, 7500);
-    }
-})();
-// ---------------------------------------------------------------------------------
+            popup.addEventListener('click', () => popup.remove());
+
+            document.body.appendChild(popup);
+
+            setTimeout(() => {
+                // animacja znikania
+                popup.style.opacity = '0';
+                setTimeout(() => popup.remove(), 500);
+            }, 7500);
+        }
+    })();
+    // ---------------------------------------------------------------------------------
 
 })();
