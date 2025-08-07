@@ -819,38 +819,50 @@
             return 0;
         }
 
-        function showUpdatePopup(scriptName, current, remote, index) {
-            const popup = document.createElement('div');
-            popup.textContent = `🔔 Aktualizacja dostępna dla ${scriptName}: ${remote} (masz ${current})`;
-            Object.assign(popup.style, {
-                position: 'fixed',
-                bottom: `${35 + index * 100}px`,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                backgroundColor: '#222',
-                color: '#fff',
-                padding: '24px 36px',
-                borderRadius: '16px',
-                fontSize: '18px',
-                zIndex: 9999 + index,
-                boxShadow: '0 0 20px rgba(0,0,0,0.4)',
-                cursor: 'pointer',
-                userSelect: 'none',
-                transition: 'opacity 0.3s ease',
-                opacity: '1',
-                maxWidth: '90%',
-                textAlign: 'center',
-            });
+function showUpdatePopup(scriptName, current, remote, index) {
+        const popup = document.createElement('div');
+        popup.textContent = `🔔 Dostępna aktualizacja dla ${scriptName}: ${remote} (Zainstalowana wersja: ${current})`;
+        Object.assign(popup.style, {
+        position: 'fixed',
+        bottom: `${20 + index * 100}px`,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: '#222',
+        color: '#fff',
+        padding: '24px 36px',
+        borderRadius: '16px',
+        fontSize: '18px',
+        zIndex: 9999 + index,
+        boxShadow: '0 0 20px rgba(0,0,0,0.4)',
+        cursor: 'pointer',
+        userSelect: 'none',
+        transition: 'opacity 0.3s ease',
+        opacity: '1',
+        maxWidth: '90%',
+        textAlign: 'center',
+        });
 
-            popup.addEventListener('click', () => popup.remove());
+        const closeBtn = document.createElement('span');
+        closeBtn.textContent = '❌';
+        Object.assign(closeBtn.style, {
+            position: 'absolute',
+            top: '8px',
+            right: '12px',
+            cursor: 'pointer',
+            color: '#fff',
+            fontWeight: 'bold',
+        });
 
-            document.body.appendChild(popup);
+        closeBtn.addEventListener('click', () => popup.remove());
 
-            setTimeout(() => {
-                popup.style.opacity = '0';
-                setTimeout(() => popup.remove(), 500);
-            }, 7500);
-        }
+        popup.appendChild(closeBtn);
+        document.body.appendChild(popup);
+
+        setTimeout(() => {
+            popup.style.opacity = '0';
+            setTimeout(() => popup.remove(), 500);
+        }, 7500);
+    }
     })();
 
 })();
