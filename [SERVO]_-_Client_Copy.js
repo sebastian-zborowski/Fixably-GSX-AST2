@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         [SERVO] - Client_Copy
+// @name         [SERVO] - CLIENT_COPY
 // @version      1.0
 // @author       Sebastian Zborwoski
 // @description  Kopiowanie DO SCHOWKA danych klienta, celem łatwego WKLEJENIA ich później do GSX
