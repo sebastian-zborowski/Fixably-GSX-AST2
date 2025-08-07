@@ -31,8 +31,8 @@ Kliknij w poniższy link aby pobrać plik **.ZIP** zawierający wszystkie skrypt
 ### [FIXABLY] - PHOTO_PREVIEW
 Podgląd zdjęć oraz plików załączonych do zlecenia w Fixably.
 
-### [GSX] - ACTION_REQUIRED
-Skrypt analizuje dane z maili typu *Action Required* i generuje gotowe odpowiedzi dla serwisantów.
+### [FIXABLY] - INTERFACE_TWEAKS
+Zaawansowana reorganizacja interfejsu Fixably. Upodabnia interfej do tego w Servo
 
 ### [AST2] - PASTE_LINK
 Automatycznie otwiera AST2 z numerem seryjnym zlecenia wyciągniętym z Fixably. 
@@ -45,8 +45,16 @@ Usprawnia dodawanie części do zleceń w GSX. Umożliwia pracę z wieloma sesja
 Pozwala jednym kliknięciem otworzyć zlecenie naprawy w GSX bezpośrednio z Fixably. 
 Współdziała ze skryptem INTERFACE_TWEAKS, aby obsługa była w pełni zautomatyzowana.
 
-### [FIXABLY] - INTERFACE_TWEAKS
-Zaawansowana reorganizacja interfejsu Fixably. Upodabnia interfej do tego w Servo
+### [GSX] - ACTION_REQUIRED
+Skrypt analizuje dane z maili typu *Action Required* i generuje gotowe odpowiedzi dla serwisantów.
+
+### [GSX] - CLIENT_PASTE
+Pozwala na wklejenie całego elementu <ADDRESS> do GSX
+Współdziała ze skryptem CLIENT_COPY, aby obsługa była w pełni zautomatyzowana.
+
+### [SERVO] - CLIENT_COPY
+Pozwala na skopiowanie całego elementu <ADDRESS> z SERVO
+Współdziała ze skryptem CLIENT_PASTE, aby obsługa była w pełni zautomatyzowana.
 
 
 ---
