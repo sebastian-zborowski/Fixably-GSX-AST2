@@ -26,7 +26,7 @@
         }
 
         const copyBtn = document.createElement('button');
-        copyBtn.textContent = 'KOPIUJ KLIENTA';
+        copyBtn.textContent = 'KOPIUJ';
         copyBtn.style.cssText = 'display:inline-block;margin-bottom:8px;padding:4px 8px;font-size:12px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;';
 
         address.insertBefore(document.createElement('br'), address.firstChild);
