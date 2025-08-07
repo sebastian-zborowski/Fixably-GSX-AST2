@@ -5,8 +5,8 @@
 // @description  Debugowanie wklejania danych klienta do GSX
 // @match        https://gsx2.apple.com/*
 // @exclude      https://gsx2*dummy*
-// @updateURL
-// @downloadURL
+// @updateURL    https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BGSX%5D_-_CLIENT_PASTE.js
+// @downloadURL  https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BGSX%5D_-_CLIENT_PASTE.js
 // @grant        none
 // @source       https://github.com/sebastian-zborowski
 // ==/UserScript==
@@ -96,7 +96,7 @@
 // Kontrola wersji alert ---------------------------------------------------------
 (async function() {
     const scriptList = [
-        { name: 'CLIENT_PASTE', url: '' },
+        { name: 'CLIENT_PASTE', url: 'https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BGSX%5D_-_CLIENT_PASTE.js' },
     ];
 
     const currentVersions = {
