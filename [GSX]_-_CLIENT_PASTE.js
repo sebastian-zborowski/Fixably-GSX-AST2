@@ -11,6 +11,11 @@
 // @source       https://github.com/sebastian-zborowski
 // ==/UserScript==
 
+//Disclaimer:
+//Niniejszy skrypt został utworzony metodą Vibecodingu. Nie ingeruje trwale w oryginalne strony internetowe, ODWOŁUJE SIĘ do danych prywatnych kopiując je do SCHOWKA SYSTEMOWEGO, natomiast nie zapisuje/utrwala ich stale. Skrypt nie zmienia podstawowego działania strony. Skrypt dodaje kilka automatyzacji, skrótów oraz modyfikacje wizualne, które mają na celu usprawnienie i ułatwienie korzystania z serwisu.
+
+//Ostatnia aktualizacja: 07.08.2025
+
 (function() {
     'use strict';
 
