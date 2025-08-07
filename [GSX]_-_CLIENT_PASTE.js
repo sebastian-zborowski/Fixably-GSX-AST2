@@ -207,4 +207,3 @@ function showUpdatePopup(scriptName, current, remote, index) {
 // ---------------------------------------------------------------------------------
 
 })();
-})();
