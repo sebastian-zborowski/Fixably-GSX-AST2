@@ -760,6 +760,8 @@
         initAlwaysOnFeatures();
     }
 
+
+// Kontrola wersji alert ---------------------------------------------------------
     (async function() {
         const scriptList = [
             { name: 'INTERFACE_TWEAKS', url: 'https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BFIXABLY%5D_-_INTERFACE_TWEAKS.js' },
@@ -864,5 +866,5 @@ function showUpdatePopup(scriptName, current, remote, index) {
         }, 7500);
     }
     })();
-
+// ---------------------------------------------------------------------------
 })();
