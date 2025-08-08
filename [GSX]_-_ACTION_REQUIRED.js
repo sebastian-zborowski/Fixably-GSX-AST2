@@ -121,7 +121,7 @@
     const textarea = document.createElement('textarea');
     textarea.id = 'input';
     textarea.placeholder = 'Wklej tutaj tabelkę z maila';
-    textarea.style.cssText = 'width:100%;height:150px;font-family:monospace;font-size:14px;padding:8px;background:#111;color:white;border:1px solid #444;box-sizing:border-box;';
+    textarea.style.cssText = 'width:100%;height:20vh;font-family:monospace;font-size:14px;padding:8px;background:#111;color:white;border:1px solid #444;box-sizing:border-box;';
     container.appendChild(textarea);
     container.appendChild(document.createElement('br'));
 
