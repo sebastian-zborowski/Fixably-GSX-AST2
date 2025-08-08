@@ -4,8 +4,8 @@
 // @author       Sebastian Zborwoski
 // @description  Kopiowanie DO SCHOWKA danych klienta, celem łatwego WKLEJENIA ich później do GSX
 // @match        https://servo.ispot.pl/o*
-// @updateURL    
-// @downloadURL  
+// @updateURL    https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BSERVO%5D_-_CLIENT_COPY.js
+// @downloadURL  https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BSERVO%5D_-_CLIENT_COPY.js
 // @grant        none
 // @source       https://github.com/sebastian-zborowski
 // ==/UserScript==
@@ -150,7 +150,7 @@
     (async function() {
 
         const scriptList = [
-            { name: 'CLIENT_COPY', url: '' },
+            { name: 'CLIENT_COPY', url: 'https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BSERVO%5D_-_CLIENT_COPY.js' },
         ];
 
         const currentVersions = {
