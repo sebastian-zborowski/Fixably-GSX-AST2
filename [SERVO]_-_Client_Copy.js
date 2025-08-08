@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         [SERVO] - CLIENT_COPY
-// @version      1.0
+// @version      1.1
 // @author       Sebastian Zborwoski
 // @description  Kopiowanie DO SCHOWKA danych klienta, celem łatwego WKLEJENIA ich później do GSX
 // @match        https://servo.ispot.pl/o*
@@ -81,7 +81,6 @@
                 postalCode = match ? match[1] : " ";
                 city = match ? match[2] : pcLine || " ";
             } else {
-                // Szukamy linii z kodem pocztowym, by wyciągnąć adres bez NIP
                 const pcIndex = addressLines.findIndex(line => /^\d{2}-\d{3}/.test(line));
                 if (pcIndex !== -1 && pcIndex > 0) {
                     postalCode = addressLines[pcIndex].match(/^(\d{2}-\d{3})/)[1] || " ";
@@ -107,7 +106,13 @@
                     .join('')
                 : " ";
 
-            const repairNumber = ((initials !== " " ? initials : "") + (rawRepairNumber !== " " ? rawRepairNumber : "")).trim() || " ";
+            let repairNumber = ((initials !== " " ? initials : "") + (rawRepairNumber !== " " ? rawRepairNumber : "")).trim() || " ";
+
+            // 🔍 DODATKOWA FUNKCJONALNOŚĆ: Sprawdzanie PZU
+            const pageText = document.body.innerText || "";
+            if (/PZU(\s+SA)?/i.test(pageText)) {
+                repairNumber += "_PZU";
+            }
 
             return {
                 repairNumber,
@@ -149,7 +154,7 @@
         ];
 
         const currentVersions = {
-            OPEN_GNUM: '1.0',
+            CLIENT_COPY: '1.1',
         };
 
         await Promise.all(scriptList.map(async script => {
