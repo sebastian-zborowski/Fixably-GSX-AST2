@@ -51,7 +51,7 @@
         document.body.style.margin = '0';
         document.body.style.backgroundColor = '#555';
       triggerBtn.disabled = true;
-      triggerBtn.textContent = 'Wczytywanie...';
+      triggerBtn.textContent = '🔄 Wczytywanie...';
 
       setTimeout(() => {
         addInlineParser();
@@ -174,7 +174,7 @@
           const line = document.createElement('div');
           line.className = 'result-line';
           line.dataset.code = code;
-          line.textContent = code + ': X';
+          line.textContent = code + ': ❌';
 
           line.style.border = 'none';
           line.style.padding = '4px 6px';
@@ -200,7 +200,7 @@
     async function fetchCodeData(code) {
       return new Promise(resolve => {
         const line = resultsDiv.querySelector('.result-line[data-code="' + code + '"]');
-        if (line) line.textContent = code + ': WCZYTUJE...';
+        if (line) line.textContent = code + ': 🔄 WCZYTUJE...';
 
         let statusText = document.getElementById('current-check-status');
         if (!statusText) {
@@ -329,14 +329,14 @@
                 .slice(0, 10)
                 .find(l => ['Closed and completed', 'Closed and Completed', 'Unit Returned Replaced', 'Repair Released from Processing'].includes(l.trim()));
 
-              const finalValue = specialLine || 'BŁĄD – brak technika';
+              const finalValue = '☠️ Sprawdzić ręcznie';
               clearInterval(timerInterval);
               clearInterval(checkInterval);
               setTimeout(() => {
                 wrapper.remove();
                 if (line) line.textContent = code + ': ' + finalValue;
                 statusText.textContent = '';
-                gnumToName[code] = specialLine ? specialLine : 'ID:';
+                gnumToName[code] = specialLine ? '☠️ Sprawdzić ręcznie' : 'ID:';
                 resolve({ code, value: finalValue });
               }, 600);
             }
