@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         [SERVO] - CLIENT_COPY
-// @version      1.0
-// @author       Sebastian Zborwoski
+// @version      1.1
+// @author       Sebastian Zborowski
 // @description  Kopiowanie DO SCHOWKA danych klienta, celem łatwego WKLEJENIA ich później do GSX
 // @match        https://servo.ispot.pl/o*
 // @updateURL    https://raw.githubusercontent.com/sebastian-zborowski/Fixably-GSX-AST2/main/%5BSERVO%5D_-_CLIENT_COPY.js
@@ -154,7 +154,7 @@
         ];
 
         const currentVersions = {
-            CLIENT_COPY: '1.0',
+            CLIENT_COPY: '1.1',
         };
 
         await Promise.all(scriptList.map(async script => {
