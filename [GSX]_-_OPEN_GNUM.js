@@ -20,12 +20,11 @@
 
   if (location.search.includes('dummy=1')) {
     console.log('Dummy page detected, skrypt nie wykonuje się tutaj.');
-    return; // przerwij wykonanie skryptu jeżeli strona jest tylko DUMMY do pobrania danych > Zapobieganie zapchaniu pamięci safari
+    return; 
   }
 
    const urlParams = new URLSearchParams(window.location.search);
-    const openGnum = urlParams.get('opengnum'); //szukaj parametru opengnum, tylko wtedy uruchamiaj skrypt
-
+    const openGnum = urlParams.get('opengnum');
     if (openGnum !== '1') return;
 
     const waitForContainer = () => {
