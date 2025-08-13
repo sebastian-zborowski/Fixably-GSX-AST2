@@ -20,7 +20,7 @@
 
   if (location.search.includes('dummy=1')) {
     console.log('Dummy page detected, skrypt nie wykonuje się tutaj.');
-    return; // przerwij wykonanie skryptu jeżeli strona jest tylko DUMMY do pobrania danych > Zapobieganie zapchaniu pamięci safari
+    return;
   }
 
     document.body.style.backgroundColor = "#555";
