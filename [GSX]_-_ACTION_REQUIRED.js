@@ -67,7 +67,6 @@
                 };
 
                 closeBtn.onclick = () => {
-                    // Reset UI and show triggerBtn again
                     const container = document.querySelector('div[data-action-required-container]');
                     if (container) container.remove();
                     const objectsContainer = document.getElementById('objects-container');
@@ -257,11 +256,9 @@
 
                 const checkInterval = setInterval(() => {
                     try {
-                        // Dostęp do dokumentu załadowanego w <object>
                         const doc = objectEl.contentDocument || objectEl.getSVGDocument?.() || null;
                         if (!doc) return;
 
-                        // Szukamy statusów na stronie wewnątrz <object>
                         const statusSpan = doc.querySelector('span.objectId.header-4[aria-label="Repair status - Unit Returned Replaced"]');
                         if (statusSpan) {
                             clearInterval(timerInterval);
@@ -335,7 +332,6 @@
                 document.body.appendChild(objectsContainer);
             }
 
-            // Progress bar
             const progressBarWrapper = document.createElement('div');
             progressBarWrapper.id = 'progress-bar-wrapper';
             progressBarWrapper.style.cssText = 'width:80%;margin:3vh auto;text-align:center;';
@@ -388,7 +384,6 @@
                 progressBarWrapper.remove();
             }, 2000);
 
-            // Grupowanie wyników
             const grouped = {};
             results.forEach(r => {
                 if (!grouped[r.value]) grouped[r.value] = [];
