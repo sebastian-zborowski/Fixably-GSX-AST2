@@ -21,7 +21,7 @@
 
   if (location.search.includes('dummy=1')) {
     console.log('Dummy page detected, skrypt nie wykonuje się tutaj.');
-    return; // przerwij wykonanie skryptu jeżeli strona jest tylko DUMMY do pobrania danych > Zapobieganie zapchaniu pamięci safari
+    return;
   }
 
     function addButtons(modal) {
@@ -93,7 +93,6 @@
 
                 let currentIndex = 0;
 
-                // Deklarujemy onCheckboxChange tutaj, żeby nie było w if-bloku
                 let onCheckboxChange = null;
 
                 function searchNext() {
@@ -149,7 +148,6 @@
                     } else if ($rows.length > 1) {
                         alert("Znaleziono ${$rows.length} elementów dla kodu ${currentCode}. Proszę zaznacz ręcznie.");
 
-                        // Usuwamy poprzednie nasłuchiwacze, jeśli są
                         if (onCheckboxChange) {
                             $rows.find('input[type="checkbox"].custom-checkbox').off('change', onCheckboxChange);
                         }
