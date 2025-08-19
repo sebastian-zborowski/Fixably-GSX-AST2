@@ -34,6 +34,9 @@ Podgląd zdjęć oraz plików załączonych do zlecenia w Fixably.
 ### [FIXABLY] - INTERFACE_TWEAKS
 Zaawansowana reorganizacja interfejsu Fixably. Upodabnia interfej do tego w Servo
 
+### [FIXABLY] - NOTIFICATION_FILTER
+Ułatwia odróżnienie ważnych powiadomień, od masowych edycji akcji zbiorczej.
+
 ### [AST2] - PASTE_LINK
 Automatycznie otwiera AST2 z numerem seryjnym zlecenia wyciągniętym z Fixably. 
 Współpracuje ze skryptem INTERFACE_TWEAKS, aby obsługa była w pełni zautomatyzowana.
